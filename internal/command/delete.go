@@ -2,8 +2,8 @@ package command
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"strings"
 
 	"learning-notes-cli/internal/storage"
 )
@@ -30,7 +30,7 @@ func (a *App) runDelete(ctx context.Context, args []string, store storage.Store)
 	}
 
 	if err := store.Delete(ctx, noteID); err != nil {
-		if errors.Is(err, storage.ErrNotFound) {
+		if strings.Contains(err.Error(), storage.ErrNotFound.Error()) {
 			a.printError(fmt.Errorf("note %q not found", noteID))
 		} else {
 			a.printError(err)

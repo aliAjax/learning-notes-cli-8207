@@ -210,8 +210,7 @@ func unmarshalNote(data []byte) (model.Note, error) {
 
 	metaJSON := body[:end]
 	contentStart := end + len("\n"+frontMatterDelimiter)
-	content := strings.TrimPrefix(body[contentStart:], "\n")
-	content = strings.TrimPrefix(content, "\n")
+	content := strings.TrimLeft(body[contentStart:], "\n")
 
 	var meta noteMetadata
 	if err := json.Unmarshal([]byte(metaJSON), &meta); err != nil {

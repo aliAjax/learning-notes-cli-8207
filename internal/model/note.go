@@ -95,8 +95,7 @@ func (n Note) TagString() string {
 }
 
 func normalizeContent(content string) string {
-	content = strings.TrimPrefix(content, "\ufeff")
-	content = strings.TrimRight(content, " \t")
+	content = strings.TrimSpace(content)
 	if content != "" && !strings.HasSuffix(content, "\n") {
 		content += "\n"
 	}

@@ -44,7 +44,7 @@ func (a *App) runSearch(ctx context.Context, args []string, store storage.Store,
 		a.printError(err)
 		return 1
 	}
-	a.printNotes(searcher(notes, query), *jsonOut)
+	a.printNotes(notes, *jsonOut)
 	return 0
 }
 

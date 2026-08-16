@@ -224,7 +224,7 @@ func unmarshalNote(data []byte) (model.Note, error) {
 	return model.Note{
 		ID:        meta.ID,
 		Title:     meta.Title,
-		Tags:      model.NormalizeTags(meta.Tags),
+		Tags:      meta.Tags,
 		CreatedAt: meta.CreatedAt,
 		UpdatedAt: meta.UpdatedAt,
 		Content:   content,

@@ -38,6 +38,9 @@ func matchesText(note model.Note, text string) bool {
 	if text == "" {
 		return true
 	}
+	if note.Tags == nil {
+		return false
+	}
 	if containsFold(note.Title, text) {
 		return true
 	}

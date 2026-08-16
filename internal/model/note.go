@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 )
@@ -52,7 +53,8 @@ func NewID(now time.Time) (string, error) {
 	return now.UTC().Format("20060102-150405") + "-" + hex.EncodeToString(random), nil
 }
 
-// NormalizeTags trims, de-duplicates, and sorts tags while preserving case.
+// NormalizeTags trims, de-duplicates (case-insensitively, keeping the first
+// seen casing), and sorts tags by their lower-cased form while preserving case.
 func NormalizeTags(tags []string) []string {
 	seen := make(map[string]struct{}, len(tags))
 	result := make([]string, 0, len(tags))
@@ -61,13 +63,16 @@ func NormalizeTags(tags []string) []string {
 		if tag == "" {
 			continue
 		}
-		key := tag
+		key := strings.ToLower(tag)
 		if _, ok := seen[key]; ok {
 			continue
 		}
 		seen[key] = struct{}{}
 		result = append(result, tag)
 	}
+	sort.Slice(result, func(i, j int) bool {
+		return strings.ToLower(result[i]) < strings.ToLower(result[j])
+	})
 	return result
 }
 
@@ -77,7 +82,9 @@ func ParseTags(raw string) []string {
 	if raw == "" {
 		return []string{}
 	}
-	return NormalizeTags(strings.Split(raw, ","))
+	return NormalizeTags(strings.FieldsFunc(raw, func(r rune) bool {
+		return r == ',' || r == ';'
+	}))
 }
 
 // TagString returns a compact display string for note tags.

@@ -59,8 +59,9 @@ func matchesTag(note model.Note, tag string) bool {
 	if tag == "" {
 		return true
 	}
+	needle := strings.ToLower(tag)
 	for _, existing := range note.Tags {
-		if strings.Contains(existing, tag) {
+		if strings.ToLower(existing) == needle {
 			return true
 		}
 	}

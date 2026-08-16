@@ -175,7 +175,7 @@ func marshalNote(note model.Note) ([]byte, error) {
 	meta := noteMetadata{
 		ID:        note.ID,
 		Title:     note.Title,
-		Tags:      note.Tags,
+		Tags:      model.NormalizeTags(note.Tags),
 		CreatedAt: note.CreatedAt,
 		UpdatedAt: note.UpdatedAt,
 	}
@@ -224,7 +224,7 @@ func unmarshalNote(data []byte) (model.Note, error) {
 	return model.Note{
 		ID:        meta.ID,
 		Title:     meta.Title,
-		Tags:      meta.Tags,
+		Tags:      model.NormalizeTags(meta.Tags),
 		CreatedAt: meta.CreatedAt,
 		UpdatedAt: meta.UpdatedAt,
 		Content:   content,

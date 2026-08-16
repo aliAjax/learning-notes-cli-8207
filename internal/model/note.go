@@ -56,7 +56,7 @@ func NewID(now time.Time) (string, error) {
 // NormalizeTags trims, de-duplicates, and sorts tags while preserving case.
 func NormalizeTags(tags []string) []string {
 	seen := make(map[string]struct{}, len(tags))
-	var result []string
+	result := make([]string, 0, len(tags))
 	for _, tag := range tags {
 		tag = strings.TrimSpace(tag)
 		if tag == "" {

@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	"sort"
 	"strings"
 	"time"
 )
@@ -62,16 +61,13 @@ func NormalizeTags(tags []string) []string {
 		if tag == "" {
 			continue
 		}
-		key := strings.ToLower(tag)
+		key := tag
 		if _, ok := seen[key]; ok {
 			continue
 		}
 		seen[key] = struct{}{}
 		result = append(result, tag)
 	}
-	sort.Slice(result, func(i, j int) bool {
-		return strings.ToLower(result[i]) < strings.ToLower(result[j])
-	})
 	return result
 }
 
@@ -81,9 +77,7 @@ func ParseTags(raw string) []string {
 	if raw == "" {
 		return []string{}
 	}
-	return NormalizeTags(strings.FieldsFunc(raw, func(r rune) bool {
-		return r == ',' || r == ';'
-	}))
+	return NormalizeTags(strings.Split(raw, ","))
 }
 
 // TagString returns a compact display string for note tags.

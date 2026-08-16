@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -46,7 +47,7 @@ func (a *App) runEdit(ctx context.Context, args []string, store storage.Store) i
 
 	note, err := store.Get(ctx, noteID)
 	if err != nil {
-		if strings.Contains(err.Error(), storage.ErrNotFound.Error()) {
+		if errors.Is(err, storage.ErrNotFound) {
 			a.printError(fmt.Errorf("note %q not found", noteID))
 		} else {
 			a.printError(err)

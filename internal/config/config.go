@@ -21,7 +21,7 @@ func New(dataDir string) (Config, error) {
 
 	abs, err := filepath.Abs(dataDir)
 	if err != nil {
-		return Config{}, fmt.Errorf("resolve data directory %q: %v", dataDir, err)
+		return Config{}, fmt.Errorf("resolve data directory %q: %w", dataDir, err)
 	}
 
 	return Config{DataDir: abs}, nil

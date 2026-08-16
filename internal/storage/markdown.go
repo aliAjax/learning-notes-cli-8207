@@ -59,7 +59,7 @@ func (s *MarkdownStore) Save(ctx context.Context, note model.Note) error {
 	}
 	path := s.path(note.ID)
 	if err := os.WriteFile(path, data, 0o644); err != nil {
-		return fmt.Errorf("write note %q: %v", path, err)
+		return fmt.Errorf("write note %q: %w", path, err)
 	}
 	return nil
 }
@@ -75,7 +75,7 @@ func (s *MarkdownStore) List(ctx context.Context) ([]model.Note, error) {
 		return []model.Note{}, nil
 	}
 	if err != nil {
-		return nil, fmt.Errorf("read data directory %q: %v", s.dir, err)
+		return nil, fmt.Errorf("read data directory %q: %w", s.dir, err)
 	}
 
 	notes := make([]model.Note, 0, len(entries))
@@ -110,7 +110,7 @@ func (s *MarkdownStore) Get(ctx context.Context, id string) (model.Note, error) 
 
 	note, err := s.readFile(id + ".md")
 	if errors.Is(err, os.ErrNotExist) {
-		return model.Note{}, fmt.Errorf("note %q not found", id)
+		return model.Note{}, ErrNotFound
 	}
 	if err != nil {
 		return model.Note{}, err
@@ -129,7 +129,7 @@ func (s *MarkdownStore) Delete(ctx context.Context, id string) error {
 
 	path := s.path(id)
 	if err := os.Remove(path); errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("note %q not found", id)
+		return ErrNotFound
 	} else if err != nil {
 		return fmt.Errorf("delete note %q: %w", path, err)
 	}

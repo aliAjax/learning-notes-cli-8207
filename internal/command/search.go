@@ -30,7 +30,7 @@ func (a *App) runSearch(ctx context.Context, args []string, store storage.Store,
 	}
 
 	query := search.Query{
-		Text:  strings.Join(fs.Args(), ""),
+		Text:  strings.Join(fs.Args(), " "),
 		Title: *title,
 		Tag:   *tag,
 	}

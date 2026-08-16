@@ -60,7 +60,7 @@ func matchesTag(note model.Note, tag string) bool {
 		return true
 	}
 	for _, existing := range note.Tags {
-		if strings.Contains(existing, tag) {
+		if strings.EqualFold(strings.TrimSpace(existing), tag) {
 			return true
 		}
 	}

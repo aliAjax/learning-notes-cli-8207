@@ -43,6 +43,9 @@ func NewMarkdownStore(dir string) *MarkdownStore {
 
 // Save writes a note to <data-dir>/<id>.md.
 func (s *MarkdownStore) Save(ctx context.Context, note model.Note) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if err := validateID(note.ID); err != nil {
 		return err
 	}
@@ -63,6 +66,10 @@ func (s *MarkdownStore) Save(ctx context.Context, note model.Note) error {
 
 // List returns all notes ordered by update time descending.
 func (s *MarkdownStore) List(ctx context.Context) ([]model.Note, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
 	entries, err := os.ReadDir(s.dir)
 	if errors.Is(err, os.ErrNotExist) {
 		return []model.Note{}, nil
@@ -94,6 +101,9 @@ func (s *MarkdownStore) List(ctx context.Context) ([]model.Note, error) {
 
 // Get returns a note by exact ID.
 func (s *MarkdownStore) Get(ctx context.Context, id string) (model.Note, error) {
+	if err := ctx.Err(); err != nil {
+		return model.Note{}, err
+	}
 	if err := validateID(id); err != nil {
 		return model.Note{}, err
 	}
@@ -110,6 +120,9 @@ func (s *MarkdownStore) Get(ctx context.Context, id string) (model.Note, error) 
 
 // Delete removes a note by exact ID.
 func (s *MarkdownStore) Delete(ctx context.Context, id string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if err := validateID(id); err != nil {
 		return err
 	}

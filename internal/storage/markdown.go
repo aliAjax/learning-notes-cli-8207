@@ -110,7 +110,7 @@ func (s *MarkdownStore) Get(ctx context.Context, id string) (model.Note, error) 
 
 	note, err := s.readFile(id + ".md")
 	if errors.Is(err, os.ErrNotExist) {
-		return model.Note{}, fmt.Errorf("note %q not found", id)
+		return model.Note{}, fmt.Errorf("note %q: %w", id, ErrNotFound)
 	}
 	if err != nil {
 		return model.Note{}, err
@@ -129,7 +129,7 @@ func (s *MarkdownStore) Delete(ctx context.Context, id string) error {
 
 	path := s.path(id)
 	if err := os.Remove(path); errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("note %q not found", id)
+		return fmt.Errorf("note %q: %w", id, ErrNotFound)
 	} else if err != nil {
 		return fmt.Errorf("delete note %q: %w", path, err)
 	}
